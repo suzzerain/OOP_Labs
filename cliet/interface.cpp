@@ -1,7 +1,5 @@
 #include "interface.h"
 #include "common.h"
-//#include <iostream>
-//#include <QString>
 
 
 
@@ -57,6 +55,10 @@ TInterface::TInterface(QWidget *parent): QWidget(parent) {
 
    output = new QLabel(this);
    output->setGeometry(160, 300, 200, 80);
+   matrix_output_1 = new QLabel(this);
+   matrix_output_1->setGeometry(160, 320, 200, 80);
+   matrix_output_2 = new QLabel(this);
+   matrix_output_2->setGeometry(160, 340, 200, 80);
 
    connect(determinant, SIGNAL(pressed()), this, SLOT(formRequest()));
    connect(matrix, SIGNAL(pressed()), this, SLOT(formRequest()));
@@ -87,26 +89,19 @@ TInterface::~TInterface(){
     delete d_num;
     delete d_den;
 
+    delete matrix;
+    delete determinant;
+    delete rank;
+    delete transpose;
+
+    delete output;
+    delete matrix_output_1;
+    delete matrix_output_2;
 }
 
 
 
 void TInterface::formRequest(){
-
-    /*number a(a_num->text().toInt(), a_den->text().toInt());
-    number b(b_num->text().toInt(), b_den->text().toInt());
-    number c(c_num->text().toInt(), c_den->text().toInt());
-    number d(d_num->text().toInt(), d_den->text().toInt());
-
-    TMatrix matrix;
-    matrix.inputMatrix(a, b, c, d);
-
-    output->setText(QString("[" + QString::number(a.getNumerator()) + "/" + QString::number(a.getDenominator()) + "] ["
-                            + QString::number(b.getNumerator()) + "/" + QString::number(b.getDenominator()) + "]\n") + "["
-                            + QString::number(c.getNumerator()) + "/" + QString::number(c.getDenominator()) + "] ["
-                            + QString::number(d.getNumerator()) + "/" + QString::number(d.getDenominator()) + "]\n");
-                            */
-
     QString msg;
     msg << a_num->text() << a_den->text();
     msg << b_num->text() << b_den->text();
@@ -117,14 +112,14 @@ void TInterface::formRequest(){
     if(btn == matrix){
         msg << QString().setNum(MATRIX_REQUEST);
     }
-    if(btn == determinant){
-        //msg << QString().setNum();
-    }
     if(btn == transpose){
-        //
+        msg << QString().setNum(TRANSPOSE_REQUEST);
+    }
+    if(btn == determinant){
+        msg << QString().setNum(DETERMINANT_REQUEST);
     }
     if(btn == rank){
-        //
+        msg << QString().setNum(RANK_REQUEST);
     }
     emit request(msg);
 }
@@ -133,87 +128,61 @@ void TInterface::formRequest(){
 
 void TInterface::answer(QString msg){
     QString text;
+
     int p = msg.indexOf(separator);
     int t = msg.left(p).toInt();
-    msg = msg.mid(p + 1, msg.length() - p - 2);
+    msg = msg.mid(p + 1, msg.length() - p - 1);
+
     switch(t){
-       case MATRIX_ANSWER:
-          text = "";
-          text += msg.left(p);
-          text += " ";
-          text += msg.right(msg.length() - p - 1);
+       case MATRIX_ANSWER: {
+          text = "matrix:\n";
           output->setText(text);
+
+          text = msg.mid(0, msg.length()/2);
+          matrix_output_1->setText(text);
+
+          text = msg.mid(msg.length() / 2);
+          matrix_output_2->setText(text);
           break;
-       case PRINT_ANSWER:
-          text = "";
+       }
+       case TRANSPOSE_ANSWER: {
+          text = "transpose:\n";
+          output->setText(text);
+
+          text = msg.mid(0, msg.length() / 2);
+          matrix_output_1->setText(text);
+
+          text = msg.mid(msg.length() / 2);
+          matrix_output_2->setText(text);
+          break;
+       }
+       case DETERMINANT_ANSWER: {
+          matrix_output_1->setText("");
+          matrix_output_2->setText("");
+
+          text = "determinant:\n";
           text += msg;
           output->setText(text);
           break;
-       default:
+       }
+       case RANK_ANSWER: {
+          matrix_output_1->setText("");
+          matrix_output_2->setText("");
+
+          text = "rank:\n";
+          text += msg;
+          output->setText(text);
           break;
+       }
+       case ERROR: {
+          matrix_output_1->setText("");
+          matrix_output_2->setText("");
+
+          text = "ERROR:\n'0' in denominator";
+          output->setText(text);
+       }
+       default: {
+          break;
+       }
     }
 }
-
-
-
-/*void TInterface::onCalculateDet() {
-
-    number a(a_num->text().toInt(), a_den->text().toInt());
-    number b(b_num->text().toInt(), b_den->text().toInt());
-    number c(c_num->text().toInt(), c_den->text().toInt());
-    number d(d_num->text().toInt(), d_den->text().toInt());
-
-    if(a.getNumerator() == 0 || a.getDenominator() == 0 || b.getNumerator() == 0 || b.getDenominator() == 0 ||
-       c.getNumerator() == 0 || c.getDenominator() == 0 || d.getNumerator() == 0 || d.getDenominator() == 0){
-       output->setText("Error");
-    }
-    else{
-       TMatrix matrix;
-       matrix.inputMatrix(a, b, c, d);
-
-       number det = matrix.calculateDet();
-
-       QString result = "Determinant: \n" + QString::number(det.getNumerator()) + "/" + QString::number(det.getDenominator());
-       output->setText(result);
-    }
-
-
-}
-
-
-
-void TInterface::onCalculateRank() {
-
-    number a(a_num->text().toInt(), a_den->text().toInt());
-    number b(b_num->text().toInt(), b_den->text().toInt());
-    number c(c_num->text().toInt(), c_den->text().toInt());
-    number d(d_num->text().toInt(), d_den->text().toInt());
-
-    TMatrix matrix;
-    matrix.inputMatrix(a, b, c, d);
-
-    int rank = matrix.calculateRank();
-
-    output->setText("Rank: \n" + QString::number(rank));
-}
-
-
-
-void TInterface::onTransposeMatrix(){
-
-    number a(a_num->text().toInt(), a_den->text().toInt());
-    number b(b_num->text().toInt(), b_den->text().toInt());
-    number c(c_num->text().toInt(), c_den->text().toInt());
-    number d(d_num->text().toInt(), d_den->text().toInt());
-
-    TMatrix matrix;
-    matrix.inputMatrix(a, b, c, d);
-
-    output->setText(QString("[" + QString::number(a.getNumerator()) + "/" + QString::number(a.getDenominator()) + "] ["
-                           + QString::number(c.getNumerator()) + "/" + QString::number(c.getDenominator()) + "]\n") + "["
-                           + QString::number(b.getNumerator()) + "/" + QString::number(b.getDenominator()) + "] ["
-                           + QString::number(d.getNumerator()) + "/" + QString::number(d.getDenominator()) + "]\n");
-
-}*/
-
-

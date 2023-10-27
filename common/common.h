@@ -3,15 +3,16 @@
 
 #include <QString>
 
-enum messages
-{
-    MATRIX_REQUEST = 1,
+enum messages {
+    MATRIX_REQUEST,
     MATRIX_ANSWER,
-    PRINT_MATRIX_REQUEST,
-    PRINT_ANSWER,
+    TRANSPOSE_REQUEST,
+    TRANSPOSE_ANSWER,
     DETERMINANT_REQUEST,
     DETERMINANT_ANSWER,
-
+    RANK_REQUEST,
+    RANK_ANSWER,
+    ERROR,
 };
 
 extern const QChar separator;

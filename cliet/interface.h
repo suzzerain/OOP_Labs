@@ -30,13 +30,15 @@ class TInterface : public QWidget {
     QPushButton *rank;
 
     QLabel *output;
+    QLabel *matrix_output_1;
+    QLabel *matrix_output_2;
 
 public:
     TInterface(QWidget *parent = nullptr);
     ~TInterface();
 
 public slots:
-    void answer(QString);
+   void answer(QString);
 
 private slots:
    void formRequest();
