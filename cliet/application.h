@@ -1,6 +1,5 @@
-#ifndef TAPPLICATION_H
-#define TAPPLICATION_H
-
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 #include <QObject>
 #include <QApplication>
@@ -12,8 +11,8 @@
 class TApplication : public QApplication {
     Q_OBJECT
 
-    communicator *comm;
-    TInterface *interface;
+    TCommunicator *comm;
+    TInterface    *interface;
 
 public:
     TApplication(int, char**);
@@ -23,4 +22,4 @@ public slots:
     void toCommunicator(QString);
 };
 
-#endif // TAPPLICATION_H
+#endif // APPLICATION_H

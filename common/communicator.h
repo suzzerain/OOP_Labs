@@ -14,14 +14,14 @@ struct TCommParams {
 
 
 
-class communicator : public QUdpSocket {
+class TCommunicator : public QUdpSocket {
     Q_OBJECT
 
     bool         ready;
     TCommParams  params;
 
 public:
-    communicator(TCommParams&,QObject *parent = nullptr);
+    TCommunicator(TCommParams&,QObject *parent = nullptr);
     bool isReady();
 
 signals:
@@ -32,6 +32,7 @@ public slots:
 
 private slots:
     void recieve();
+
 };
 
 #endif // COMMUNICATOR_H

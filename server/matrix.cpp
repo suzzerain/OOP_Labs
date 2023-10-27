@@ -29,16 +29,3 @@ number TMatrix::calculateDet() {
 int TMatrix::calculateRank() {
     return 2;
 }
-
-
-
-/*std::ostream& operator<< (std::ostream& os, TMatrix& matrix){
-    TMatrix matrix;
-    matrix.inputMatrix(a, b, c, d);
-    if(matrix.printMode == EPRINTMATRIXCLASSIC){
-        os << m.a();
-    }
-    else{
-
-    }
-}*/
