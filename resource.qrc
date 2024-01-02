@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/resource">
+        <file>processor.png</file>
+    </qresource>
+</RCC>
