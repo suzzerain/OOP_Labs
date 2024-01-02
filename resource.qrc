@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/resource">
+        <file>carpattern.png</file>
+    </qresource>
+</RCC>
